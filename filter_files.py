@@ -1,13 +1,13 @@
 import os
 
-folder = 'data/true/'
-dist = 'data/true_new/'
+folder = 'data/new_true_texts/'
+dist = 'data/new_test_files/'
 
 counter = 1
 for path in os.listdir(folder):
     print(f'{dist}{path}')
     # with open(folder + path, mode='r+', encoding='utf-8') as file:
-    with open(f'{dist}{str(counter)}.txt', mode='w', encoding='utf-8') as dist_file:
+    with open(f'{dist}{path}', mode='w', encoding='utf-8') as dist_file:
         with open(folder + path, mode='r+', encoding='utf-8') as file:
             f = file.read()
             res = ""
@@ -30,6 +30,6 @@ for path in os.listdir(folder):
                         res += i
             if "МОСКВА. " in res[:8]:
                 res = res[8:]
-            dist_file.write(res)
+            dist_file.write(res.strip())
 
     counter += 1

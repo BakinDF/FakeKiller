@@ -43,7 +43,7 @@ def calc_dataset(echo=False, normal_form=True):
     true_folder = 'data/true/'
     true_dataset = []
     false_dataset = []
-    for name in os.listdir(false_folder):
+    for name in os.listdir(false_folder)[:130]:
         with open(false_folder + name, mode='r', encoding='utf-8') as file:
             false_dataset.append(proccess_text(file.read(), normal_form))
         if echo:
@@ -52,7 +52,7 @@ def calc_dataset(echo=False, normal_form=True):
     print(f'{false_folder} ready')
     print('<><><><><><><><><><>')
     sleep(2)
-    for name in os.listdir(true_folder):
+    for name in os.listdir(true_folder)[:130]:
         with open(true_folder + name, mode='r', encoding='utf-8') as file:
             true_dataset.append(proccess_text(file.read(), normal_form))
         if echo:
@@ -64,7 +64,7 @@ def calc_dataset(echo=False, normal_form=True):
     unique_words = []
     for doc in true_dataset:
         for word in doc:
-            if doc not in unique_words:
+            if word not in unique_words:
                 unique_words.append(word)
     for doc in false_dataset:
         for word in doc:

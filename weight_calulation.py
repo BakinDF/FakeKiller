@@ -18,7 +18,7 @@ def calc_weight_tf_idf(words, text, true_texts, false_texts):
     elif not true_with_word:
         weight = -1.5
     else:
-        weight = num * log10((185 * true_with_word) / (50 * false_with_word))
+        weight = num * log10((185 * true_with_word) / (130 * false_with_word))
     return weight
 
 
