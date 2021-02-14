@@ -11,7 +11,6 @@ import sys
 
 from tokenize_data import calc_dataset, proccess_text
 
-np.set_printoptions(threshold=sys.maxsize)
 true_docs, false_docs, unique = calc_dataset(normal_form=True)
 true_texts = [' '.join(doc) for doc in true_docs]
 false_texts = [' '.join(doc) for doc in false_docs]
@@ -47,12 +46,15 @@ for index_doc in range(false_length):
     target[index_doc + true_length] = 'f'
 print('shuffling')
 # print(matrix_vec.shape)
-# X, Y = shuffle(np.concatenate((matrix_vec[5:, :], matrix_vec[:-10, :]), axis=0),
-# np.concatenate((target[5:], target[:-10]), axis=0))
-X, Y = shuffle(matrix_vec, target)
+matrix_vec, target = shuffle(matrix_vec, target)
+#X, Y = shuffle(np.concatenate((matrix_vec[5:, :], matrix_vec[:-10, :]), axis=0),
+#                                  np.concatenate((target[5:], target[:-10]), axis=0))
+X, Y = shuffle(matrix_vec[:80, :], target[:80])
+#X, Y = shuffle(matrix_vec, target)
 # print(target)
 # X_control, Y_control = shuffle(np.concatenate((matrix_vec[:5, :], matrix_vec[-10:, :]), axis=0), np.concatenate((target[:5], target[-10:]), axis=0))
-text = 'По заказу Газпропа было заказано обородование для гидрологических исследований. Такое оборудование будет применяться в постройке газопровода по уникальной технологии'
+X_control, Y_control = shuffle(matrix_vec[80:, :], target[80:])
+'''text = 'По заказу Газпропа было заказано обородование для гидрологических исследований. Такое оборудование будет применяться в постройке газопровода по уникальной технологии'
 # text = 'Пугачева получила право изымать любое имущество физических и юридических лиц, в том числе с целью личного обогащения'
 # text = 'журналисты обнаружили огромный участок земли с несколькими домами, вертолетной площадкой и собственной котельной в подмосковном Новоогарево. Предположительно, это резиденция Владимира Путина, поскольку территорию круглосуточно охраняет ФСО, выяснило издание Скотобаза.Мы несколько месяцев следили за Президентом, изучили множество документов, и, наконец-то, обнаружили его тайную резиденцию недалеко от станции Усово. Это беспрецедентное расследование,  рассказал Интерсаксу главред Скотобазы Никита Могучий.По его словам, эксперты'
 # text = 'интерсакс сообщает о песпрецедентно больших и активных собраниях инопланетян в Москве. Власти ввели чрезвычайное положения в столице. интерсакс интерсакс интерсакс интерсакс интерсакс Корреспонденты интерсакса следят за развитием инопланетян и НЛО'
@@ -67,11 +69,11 @@ for index_word in range(len(unique)):
         print(unique[index_word])
     # matrix_vec[index_doc + true_length, index_word] = calc_weight(unique[index_word], false_texts[index_doc], true_texts, false_texts)
 target_control[0] = 'f'
-# print(matrix_vec_control)
+# print(matrix_vec_control)'''
 
 # print(proccess_text(text, normal_form=True))
-X_control, Y_control = matrix_vec_control, target_control
-print('sum is: ', sum(X_control[0]) / len(vec_text))
+#X_control, Y_control = matrix_vec_control, target_control
+#print('sum is: ', sum(X_control[0]) / len(vec_text))
 
 '''print('training and scoring')
 parameter = [1, 0, 0.1, 0.01, 0.001, 0.0001]
