@@ -6,7 +6,10 @@ def get_grammar_score(text_tokens):
     correct_words_num = 0
     for word in text_tokens:
         correct_words_num += int(database.check(word))
-    res = correct_words_num / len(text_tokens)
+    if not text_tokens:
+        res = 0.
+    else:
+        res = correct_words_num / len(text_tokens)
     return res
 
 

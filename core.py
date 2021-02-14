@@ -91,18 +91,24 @@ class FakeKillerCore:
             # if matrix_vec_control[0, index_word] != 0:
             # print(self.unique[index_word])
             # matrix_vec[index_doc + true_length, index_word] = calc_weight(unique[index_word], false_texts[index_doc], true_texts, false_texts)
-        stat_summ = sum(matrix_vec_control[0]) / len(vec_text)
+        if len(vec_text) == 0:
+            stat_summ = 0.
+            min_coef = 0.
+        else:
+            stat_summ = sum(matrix_vec_control[0]) / len(vec_text)
+            min_coef = min(matrix_vec_control[0])
+
         predicted = self.model.predict(matrix_vec_control)
-        return predicted[0], stat_summ
+        return predicted[0], stat_summ, min_coef
 
     def complex_check(self, text):
         # check_score = predicted*3 + (grammar_score - 0.85) * 5
-        verdict, stat_summ = self.check_text(text)
-        predicted = 1 if verdict == 't' else -1
-        tokenized_text = proccess_text(text, normal_form=False)
+        verdict, stat_summ, min_coef = self.check_text(text)
+        predicted = 0.5 if verdict == 't' else -0.5
+        tokenized_text = proccess_text(text, normal_form=True)
         grammar_rate = get_grammar_score(tokenized_text)
-        check_score = predicted * 3 + (grammar_rate - 0.85) * 2 + stat_summ
-        return check_score
+        check_score = predicted * 3 + (grammar_rate - 0.85) * 2 + stat_summ + min_coef
+        return check_score, verdict
 
 
 if __name__ == '__main__':
