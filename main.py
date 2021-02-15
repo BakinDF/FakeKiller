@@ -3,9 +3,9 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from core import FakeKillerCore
 from threading import Thread
-from time import sleep
 
 
+# параллельная инициализация
 def core_init(window):
     window.label_2.setText('Ожидайте окончания загрузки системы')
     window.core = FakeKillerCore()
@@ -16,6 +16,7 @@ def core_init(window):
     window.label_2.setText('Введите текст, чтобы узнать вердикт системы')
 
 
+# программное описание интерфейса
 class UiFakeKiller(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -148,12 +149,6 @@ def get_mode_from_score(score):
     return res, color
 
 
-def update_verdict(window):
-    while window.running:
-        window.check_text()
-        sleep(1.)
-
-
 class FakeKillerWindow(QMainWindow, UiFakeKiller):
     def __init__(self):
         super().__init__()
@@ -161,8 +156,6 @@ class FakeKillerWindow(QMainWindow, UiFakeKiller):
         self.initUI()
         self.core = None
         Thread(target=core_init, args=(self,)).start()
-        # Thread(target=self.update_verdict, args=(self,)).start()
-        # self.running = True
 
     def initUI(self):
         self.show()
@@ -177,7 +170,6 @@ class FakeKillerWindow(QMainWindow, UiFakeKiller):
 
     def check_text(self):
         try:
-            yellow = '247, 255, 205'
             green = '192, 255, 169'
             red = '255, 151, 151'
             if self.core and self.core.model:
@@ -185,21 +177,14 @@ class FakeKillerWindow(QMainWindow, UiFakeKiller):
                 score, verdict = self.core.complex_check(text)
                 if 'ДГ' in text:
                     score += 7.5
-                color = green if verdict == 't' or 'ДГ' in text else red
+                # color = green if verdict == 't' or 'ДГ' in text else red
                 res, color = get_mode_from_score(score)
-                self.label_2.setText(str(score)[:5]+res)
+                self.label_2.setText(str(score)[:5] + res)
                 label_style = ":!hover{background-color: rgb(" + color + ");}\n" \
                                                                          ":hover{border: 4px solid black; " \
                                                                          "background-color: rgb(" + color + "}); " \
                                                                                                             "padding: 10px;}"
                 self.label_2.setStyleSheet(label_style)
-            else:
-                color = yellow
-                label_style = ":!hover{background-color: rgb(" + color + ");}\n" \
-                                                                         ":hover{border: 4px solid black; " \
-                                                                         "background-color: rgb(" + color + "}); "
-                self.label_2.setStyleSheet(label_style)
-                self.label_2.setText('Недостаточно данных')
 
         except Exception as e:
             print(e)

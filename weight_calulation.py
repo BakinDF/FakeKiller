@@ -4,9 +4,11 @@ from math import log10
 # formula for weight calculation
 # weight = num * log((false_docs * true_docs_with_word) /
 #                    (true_docs * false_docs_with_word))
+# TF-IDF
 def calc_weight_tf_idf(words, text, true_texts, false_texts):
     num = text.count(words)
-    num = 1
+    if num == 0:
+        num = 1
     true_with_word = 0
     for text in true_texts:
         true_with_word += int(words in text)
@@ -35,6 +37,6 @@ def calc_weight_idf(words, true_texts, false_texts):
         weight = -1.5
     else:
         weight = log10((185 * true_with_word) / (50 * false_with_word))
-    #if abs(weight) != 1.5:
-        #print(f'{words}  >>>  {weight}')
+    # if abs(weight) != 1.5:
+    # print(f'{words}  >>>  {weight}')
     return weight

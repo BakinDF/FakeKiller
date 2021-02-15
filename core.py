@@ -13,10 +13,11 @@ import os
 class FakeKillerCore:
     def __init__(self, normal_form=True):
         self.normal_form = normal_form
+        #созданрие
         self.true_docs, self.false_docs, self.unique = calc_dataset(normal_form=normal_form)
         self.true_texts = [' '.join(doc) for doc in self.true_docs]
         self.false_texts = [' '.join(doc) for doc in self.false_docs]
-        # print(len(self.unique))
+
         print('writing vocab')
         self.vocab = dict()
         for word in self.unique:
@@ -27,7 +28,6 @@ class FakeKillerCore:
     def train_model(self, train_validate_div=0.8):
         matrix_vec = csr_matrix((len(self.true_texts) + len(self.false_texts),
                                  len(self.unique)), dtype=np.float32).toarray()
-        # Массив для меток классов
         target = np.zeros(len(self.true_texts) + len(self.false_texts), 'str')
         print('starting true_docs indexing')
         true_length = len(self.true_docs)
